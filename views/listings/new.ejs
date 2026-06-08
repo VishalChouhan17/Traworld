@@ -1,0 +1,127 @@
+<% layout("/layouts/boilerplate") -%>
+
+  <br>
+
+<div class="row">
+    
+    <div class="col-8 offset-2">
+
+        <h3>Create a new listing</h3>
+
+        <form action="/listings" method="POST" novalidate class="needs-validation">
+
+            <!-- Title -->
+            <div class="mb-3">
+
+                <label class="form-label"  >Title</label>
+
+                <input 
+                    name="listing[title]"
+                    class="form-control"
+                    value="Mountain Villa"
+                    placeholder="enter title"
+                    required
+                >
+                      <div  class="invalid-feedback">Enter a short title </div>
+
+
+                <div  class="valid-feedback">Title Looks good!</div>
+             
+
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+
+                <label class="form-label">Description</label>
+
+              <textarea
+    name="listing[description]"
+    class="form-control"
+    placeholder="enter description"
+    required></textarea>
+              <div  class="invalid-feedback">Enter a short description </div>
+
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3">
+
+                <label class="form-label">Image URL</label>
+
+                <input
+                    name="listing[image]"
+                    class="form-control"
+                    value="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+                    placeholder="enter image URL"
+                >
+
+            </div>
+
+            <!-- Price and Country -->
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">Price</label>
+
+                    <input
+                        name="listing[price]"
+                        class="form-control"
+                        
+                        placeholder="enter price"
+                        required
+                    >
+         <div  class="invalid-feedback">Enter  valid price</div>
+
+                </div>
+                               
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">Country</label>
+
+                    <input
+                        name="listing[country]"
+                        class="form-control"
+                        value="India"
+                        placeholder="enter country"
+                        required
+                    >
+             <div  class="invalid-feedback">Enter valid country name </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+
+                <label class="form-label">Location</label>
+
+                <input
+                    name="listing[location]"
+                    class="form-control"
+                    value="Manali"
+                    placeholder="enter location"
+                    required
+                >
+                <div  class="invalid-feedback">Enter valid location </div>
+
+
+            </div>
+
+            <br>
+
+            <button class="btn btn-dark">
+                Add
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<br>
