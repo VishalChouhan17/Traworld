@@ -6,6 +6,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const { saveredirectUrl } = require("../middleware");
 const usercontroller = require("../controllers/user.js");
 
+
 router.route("/signup")
     .get(usercontroller.rendersignupform)
     .post(wrapAsync(usercontroller.signup));
