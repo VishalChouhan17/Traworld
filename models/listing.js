@@ -15,12 +15,9 @@ let listingSchema =new Schema({
       required:true,
   },
   image:{
-    type:String,
-
-   default: "https://tse3.mm.bing.net/th/id/OIP.9l1kH5UpL_ogMu6fIPnypAHaFb?pid=Api&P=0&h=180",
+    url:String,
+    filename:String,
     
-     set: (v)=>v===""?"https://tse3.mm.bing.net/th/id/OIP.9l1kH5UpL_ogMu6fIPnypAHaFb?pid=Api&P=0&h=180":v,
-
 
   },
   price :{
@@ -44,7 +41,17 @@ let listingSchema =new Schema({
   owner:{
       type:Schema.Types.ObjectId,
       ref:"User",
-  }
+  },
+  geometry: {
+    type: {
+        type: String,
+        default: "Point"
+    },
+    coordinates: {
+        type: [Number],
+        default: [77.4126, 23.2599]
+    }
+}
 
 
 });

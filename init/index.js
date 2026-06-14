@@ -1,7 +1,8 @@
 const mongoose=require("mongoose");
 const initData=require("./data.js");
 const Listing=require("../models/listing.js");
-const MONGOURL="mongodb://127.0.0.1:27017/wanderlust";
+  require("dotenv").config();
+const  MONGOURL= "mongodb://localhost:27017/traworld";
 
 main().
 then(()=>{
@@ -15,7 +16,7 @@ async function main() {
 }
 
  const initDB=async()=>{
-       await Listing.deleteMany();
+       await Listing.deleteMany({});
       //using map
       initData.data=initData.data.map((obj)=>({...obj, owner: "6a22b1f0e90aa3213cabf918"}));
      

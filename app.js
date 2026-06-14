@@ -1,3 +1,8 @@
+
+if(process.env.NODE_ENV!="production"){
+  require('dotenv').config();
+}
+  
 const express = require("express");
 const app = express();
 const mongoose =require("mongoose");
@@ -15,6 +20,7 @@ const cookieParser=require("cookie-parser");
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
 const usersRouter=require("./routes/user.js");
+ 
   const flash=require("connect-flash");
  const passport=require('passport');//used for authentication
  const localStrategy=require('passport-local');//used for establishing local strategy for authentication
@@ -23,7 +29,20 @@ const connectDB = require("./config/db.js");
 
 connectDB();
 const session=require('express-session');
+const {MongoStore}=require('connect-mongo');
+  console.log(MongoStore);
+  const store=MongoStore.create({
+    mongoUrl:process.env.ATLASDB_URL,
+    crypto:{
+      secret:"mysecretcode",
+    },
+    touchAfter:24 * 3600,
+  })
+   store.on("error",(err)=>{
+     console.log("ERROR IN MONGO SESSION STORE",err);
+   })
   const sessionOptions={
+        store,
         secret:"mysecretcode",
         reserve :false,
         saveUninitialized:true,
@@ -33,6 +52,8 @@ const session=require('express-session');
               httpOnly:true,
         }
   }
+
+
   app.use(session(sessionOptions));
     app.use(flash());
 
@@ -47,10 +68,6 @@ const session=require('express-session');
    // serialize user is used to store the user in the session and deserialize user is used to get the user from the session
 
 
-app.get("/",(req,res)=>{
-        console.log(req.cookies);
-  res.send("root is working");
-})
 
 app.use((req,res,next)=>{
        res.locals.success=req.flash("success");
@@ -66,6 +83,7 @@ app.use("/",usersRouter);
 
 
 app.use((err,req,res,next)=>{
+      console.log(err);
       let {statuscode = 500 ,message="Something went wrong"}=err;
       res.status(statuscode).render("err.ejs",{message});
 

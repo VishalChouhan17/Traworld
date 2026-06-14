@@ -30,9 +30,11 @@ module.exports.rendernew=(req,res)=>{
       }
 
       module.exports.createlisting=async(req,res)=>{
-              
+                        let url=   req.file.path;
+                        let filename=   req.file.filename;
          const   newlisting  =new Listing( req.body.listing); 
            newlisting.owner=req.user._id;
+            newlisting.image={url,filename};
          await newlisting.save();
             req.flash("success","New listing created !");
              res.redirect("/listings");
@@ -46,6 +48,8 @@ module.exports.rendernew=(req,res)=>{
                   req.flash("error","The listing you are trying to edit doesn't exist");
                   return res.redirect("/listings");
               }
+               let originalimage=listing.image.url;
+             originalimage=  originalimage.replace("/upload","/upoad/h_300,w_250");
               res.render("listings/editform",{listing});
         }
             
@@ -54,6 +58,13 @@ module.exports.rendernew=(req,res)=>{
                let {id}=req.params;
          
              let listing= await Listing.findByIdAndUpdate(id,{...req.body.listing});
+               if(typeof req.file!=="undefined"){
+                let url=   req.file.path;
+                     let filename=   req.file.filename;
+                      listing.image={url,filename};
+                      await listing.save();
+               }
+
               //copy all  feilds from req.body.listing and update the listing with id
                if(!listing){req.flash("error","The listing you trying to access doesn't exist");
              return   res.redirect("/listings"); 

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const MONGOURL = "mongodb://127.0.0.1:27017/wanderlust";
+require("dotenv").config();
+const MONGOURL =process.env.ATLASDB_URL || "mongodb://localhost:27017/traworld";
 
 async function connectDB() {
     try {

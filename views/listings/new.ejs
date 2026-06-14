@@ -8,7 +8,7 @@
 
         <h3>Create a new listing</h3>
 
-        <form action="/listings" method="POST" novalidate class="needs-validation">
+        <form action="/listings" method="POST" novalidate class="needs-validation"   enctype="multipart/form-data">
 
             <!-- Title -->
             <div class="mb-3">
@@ -45,15 +45,16 @@
             </div>
 
             <!-- Image -->
-            <div class="mb-3">
+           
+              <div class="mb-3">
 
-                <label class="form-label">Image URL</label>
+                <label class="form-label">Upload Listing image</label>
 
                 <input
                     name="listing[image]"
                     class="form-control"
-                    value="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-                    placeholder="enter image URL"
+                    type="file"
+                    required
                 >
 
             </div>
@@ -68,7 +69,7 @@
                     <input
                         name="listing[price]"
                         class="form-control"
-                        
+                        type="number"
                         placeholder="enter price"
                         required
                     >

@@ -114,3 +114,24 @@ listing.card{
     
   gap: 1rem;
 }
+.fa-brands{
+      margin-right:2rem;
+}
+
+.tax-info{
+    display: none;
+     
+}
+
+
+.form-check-reverse{
+     margin-top: 0.5rem;
+      border:1px solid rgb(0, 0, 0);
+      border-radius: 1rem;
+      height:3.25rem;
+      width:14.5rem;
+      padding: 1rem;
+      margin-left: 5rem;
+      text-align: center;
+   
+}
