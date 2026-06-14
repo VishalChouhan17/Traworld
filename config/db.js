@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const MONGOURL =process.env.ATLASDB_URL || "mongodb://localhost:27017/traworld";
-
+const MONGOURL =process.env.ATLASDB_URL;
 async function connectDB() {
     try {
         await mongoose.connect(MONGOURL);

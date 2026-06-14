@@ -34,7 +34,7 @@ const {MongoStore}=require('connect-mongo');
   const store=MongoStore.create({
     mongoUrl:process.env.ATLASDB_URL,
     crypto:{
-      secret:"mysecretcode",
+      secret:process.env.SECRET,
     },
     touchAfter:24 * 3600,
   })
@@ -43,7 +43,7 @@ const {MongoStore}=require('connect-mongo');
    })
   const sessionOptions={
         store,
-        secret:"mysecretcode",
+        secret:process.env.SECRET,
         reserve :false,
         saveUninitialized:true,
         cookie:{
@@ -53,11 +53,9 @@ const {MongoStore}=require('connect-mongo');
         }
   }
 
-
   app.use(session(sessionOptions));
     app.use(flash());
 
-    
      app.use(passport.initialize());//middleware initialize passport
      app.use(passport.session());
      passport.use(new localStrategy(User.authenticate()));
