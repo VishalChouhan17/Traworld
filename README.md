@@ -1,6 +1,6 @@
-# Airbnb Clone
+# Traworld
 
-A full-stack Airbnb-inspired web application built while learning backend development.
+A full-stack Travel web application built using MERN.
 
 ## Features
 
