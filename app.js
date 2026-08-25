@@ -83,6 +83,9 @@ app.use((req, res, next) => {
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", usersRouter);
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 // 5. AI Chatbot API Route (MOVED ABOVE ERROR HANDLER)
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
