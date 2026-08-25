@@ -1,0 +1,266 @@
+<style>
+  /* Dynamic Pulsing Trigger Button */
+  .chatbot-toggler {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff385c 0%, #6366f1 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 56, 92, 0.4);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+  }
+
+  .chatbot-toggler:hover {
+    transform: scale(1.1);
+  }
+
+  /* Continuous Rotating Glow Ring for Trigger Icon */
+  .trigger-icon-spin {
+    font-size: 1.5rem;
+    animation: spinGlobe 8s linear infinite;
+  }
+
+  /* Glassmorphism Chatbot Container */
+  .chatbot-container {
+    position: fixed;
+    bottom: 6.5rem;
+    right: 2rem;
+    width: 360px;
+    max-width: 90vw;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+  }
+
+  .chatbot-container.active {
+    display: flex;
+  }
+
+  .chat-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Header AI Logo Badge Container */
+  .ai-logo-badge {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #ff385c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+
+  /* Outer Spinning Neon Ring */
+  .ai-logo-badge::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #ff385c, #6366f1, #00f2fe, #ff385c);
+    animation: spinGlobe 4s linear infinite;
+    z-index: 0;
+  }
+
+  /* Inner Mask to preserve icon background */
+  .ai-logo-badge::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #0f172a;
+    z-index: 1;
+  }
+
+  /* Center Icon Layer */
+  .ai-logo-badge i {
+    position: relative;
+    z-index: 2;
+    color: #00f2fe;
+    font-size: 0.95rem;
+    animation: pulseIcon 2s ease-in-out infinite alternate;
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .message {
+    max-width: 85%;
+    padding: 0.65rem 1rem;
+    border-radius: 18px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .bot-message {
+    background: #f1f5f9;
+    color: #0f172a;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .user-message {
+    background: #ff385c;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .chat-input-area {
+    padding: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 0.5rem;
+    background: #ffffff;
+  }
+
+  .chat-input-area input {
+    flex: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    outline: none;
+  }
+
+  .chat-input-area button {
+    background: #ff385c;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  /* Keyframe Animations */
+  @keyframes spinGlobe {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes pulseIcon {
+    from {
+      transform: scale(0.9);
+      opacity: 0.8;
+    }
+    to {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 6px #00f2fe);
+      opacity: 1;
+    }
+  }
+</style>
+
+<!-- Floating Trigger Button with Rotating Atom Icon -->
+<div class="chatbot-toggler" id="chatToggle">
+  <i class="fa-solid fa-atom trigger-icon-spin"></i>
+</div>
+
+<!-- Chat Window -->
+<div class="chatbot-container" id="chatWindow">
+  <div class="chat-header">
+    <div class="d-flex align-items-center gap-2">
+      <!-- Rotating Animated AI Badge -->
+      <div class="ai-logo-badge">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </div>
+      <span class="fw-bold text-sm text-white">Traworld AI Concierge</span>
+    </div>
+    <button class="btn-close btn-close-white text-xs" id="chatClose"></button>
+  </div>
+  
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot-message">
+      👋 Hi! Tell me your budget, travel group size, and preferences, and I will recommend destinations from our collection!
+    </div>
+  </div>
+
+  <form class="chat-input-area" id="chatForm">
+    <input type="text" id="userInput" placeholder="e.g. ₹20k, 4 people, beach vibe" required />
+    <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('chatToggle');
+  const closeBtn = document.getElementById('chatClose');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatForm = document.getElementById('chatForm');
+  const userInput = document.getElementById('userInput');
+  const chatMessages = document.getElementById('chatMessages');
+
+  toggleBtn.addEventListener('click', () => chatWindow.classList.toggle('active'));
+  closeBtn.addEventListener('click', () => chatWindow.classList.remove('active'));
+
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    appendMessage(message, 'user-message');
+    userInput.value = '';
+
+    const loadingId = appendMessage("Searching perfect destinations...", 'bot-message');
+
+    try {
+      const response = await fetch('/api/recommend-destination', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: message })
+      });
+      
+      const data = await response.json();
+      const loadingElem = document.getElementById(loadingId);
+
+      if (data.reply) {
+        // Convert Markdown bold (**text**) to HTML <b> tags
+        const formattedReply = data.reply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        loadingElem.innerHTML = formattedReply;
+      } else {
+        loadingElem.innerText = "Sorry, I couldn't find any matching destinations.";
+      }
+    } catch (err) {
+      document.getElementById(loadingId).innerText = "Error connecting to AI assistant.";
+    }
+  });
+
+  function appendMessage(text, className) {
+    const msgDiv = document.createElement('div');
+    const id = 'msg-' + Date.now();
+    msgDiv.id = id;
+    msgDiv.className = `message ${className}`;
+    msgDiv.innerText = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return id;
+  }
+</script>

@@ -1,147 +1,291 @@
-<%layout("/layouts/boilerplate")-%>
+<% layout("/layouts/boilerplate") -%>
 
- 
-<body>
-
-   <style>
-    #filters{
-        display: flex;
-         flex-wrap: wrap;
-         align-items: center;
-    }
-    .filter{
-      text-align: center;
-       margin-right: 2rem;
-       margin-top: 2rem;
-       opacity: 0.7;
-    }
-    .filter:hover{
-        opacity: 1;
-        cursor: pointer;
-        
-    }
-    .filter p{
-        font-size: 0.8rem;
-    }
+<style>
+  :root {
+    --bg-glow: rgba(255, 56, 92, 0.35);
+  }
 
   
-   </style>
-   
-    <!-- <h3>  ALL Listings</h3> -->
-     <!-- <form method="GET" action="/listings/new">
-      <button > Add new Listing </button>
-     </form> -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-     <div id="filters">
-        <div  class="filter">
-         <div>  <i class="fa-solid fa-fire"></i></div>
-              <p>  Trending</p>
-        </div>
-         
-         <div class="filter">
-         <div> <i class="fa-solid fa-bed" style="color:black;"></i></div>
-              <p>  Rooms</p>
-        </div>
-       <div class="filter">  
-        <div><i class="fa-solid fa-mountain-city" style="color: rgb(7, 1, 5);"></i></div>
-         <p> Iconic cities</p>
-       </div>
-        <div class="filter">
-         <div> <i class="fa-solid fa-mountain" style="color: rgb(7, 1, 5);"></i></div>
-              <p>  Mountains</p>
-        </div>
-         <div class="filter">
-         <div>  <i class="fa-solid fa-building-columns"></i></div>
-              <p>Castles</p>
-        </div>
+  .filter-wrapper {
+    position: sticky;
+    top: 1rem;
+    z-index: 100;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2.5rem;
+  }
 
-         <div class="filter">
-         <div><i class="fa-solid fa-person-swimming" style="color: rgb(7, 1, 5);"></i></div>
-              <p>Amazing pools</p>
-        </div>
+  #filters {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers all filter items horizontally */
+    gap: 1.5rem;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
 
-        <div class="filter">
-         <div> <i class="fa-solid fa-campground" style="color: rgb(7, 1, 5);"></i></div>
-              <p> Camping </p>
-        </div>
-         <div class="filter">
-         <div> <i class="fa-solid fa-cow" style="color: rgb(7, 1, 5);"></i></div>
-              <p>Farm</p>
-        </div>
+  #filters::-webkit-scrollbar {
+    display: none;
+  }
 
-         <div class="filter">
-         <div><i class="fa-solid fa-igloo" style="color: rgb(7, 1, 5);"></i></div>
-              <p>Arctic</p>
-        </div>
-          <div class="filter">
-         <div> <i class="fa-solid fa-umbrella-beach" style="color: rgb(7, 1, 5);"></i></div>
-              <p>Beach</p>
-        </div>
+  .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0.6;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    white-space: nowrap;
+  }
 
-         <div class="filter">
-         <div><i class="fa-solid fa-monument" style="color: rgb(7, 1, 5);"></i></div>
-              <p>Monuments</p>
-        </div>
-         
-        <div class="form-check-reverse form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-  <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+  .filter i {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    transition: transform 0.3s ease;
+  }
+
+  .filter p {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
+  .filter:hover i {
+    transform: scale(1.2);
+  }
+
+  /* Tax Toggle Container & Reduced Text Size */
+  .tax-toggle-box {
+    flex-shrink: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 1.25rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Reduced switch text font size and smaller toggle scale */
+  .tax-toggle-box .form-check-label {
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 0.75rem; /* Reduced label text size */
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .tax-toggle-box .form-check-input {
+    cursor: pointer;
+    transform: scale(0.85); /* Slightly downscales the switch button */
+  }
+
+  /* 3D Dynamic Card Layout */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    perspective: 1000px;
+  }
+
+  .listing-card-wrapper {
+    position: relative;
+    text-decoration: none !important;
+    color: inherit;
+    border-radius: 24px;
+    perspective: 1000px;
+  }
+
+  /* Dynamic Ambient Glow Behind Card */
+  .ambient-glow {
+    position: absolute;
+    inset: -10px;
+    background: radial-gradient(circle, var(--bg-glow) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 32px;
+    opacity: 0;
+    filter: blur(20px);
+    transition: opacity 0.4s ease;
+    z-index: 0;
+  }
+
+  .listing-card-wrapper:hover .ambient-glow {
+    opacity: 1;
+  }
+
+  .dynamic-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
+    padding: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  }
+
+  .listing-card-wrapper:hover .dynamic-card {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  .card-img-wrapper {
+    position: relative;
+    height: 18rem;
+    border-radius: 18px;
+    overflow: hidden;
+    transform: translateZ(20px);
+  }
+
+  .card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .listing-card-wrapper:hover img {
+    transform: scale(1.08);
+  }
+
+  .badge-overlay {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateZ(30px);
+  }
+
+  .card-details {
+    padding: 1rem 0.5rem 0.5rem;
+    transform: translateZ(30px);
+  }
+
+  .card-title-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.25rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .price-tag {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.95rem;
+  }
+
+  .tax-info {
+    display: none;
+    color: #e11d48;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>
+
+<body>
+  <!-- Floating Glass Filter Bar -->
+  <div class="filter-wrapper">
+    <div id="filters">
+      <div class="filter"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+      <div class="filter"><div><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
+      <div class="filter"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic cities</p></div>
+      <div class="filter"><div><i class="fa-solid fa-mountain"></i></div><p>Mountains</p></div>
+      <div class="filter"><div><i class="fa-solid fa-building-columns"></i></div><p>Castles</p></div>
+      <div class="filter"><div><i class="fa-solid fa-person-swimming"></i></div><p>Amazing pools</p></div>
+      <div class="filter"><div><i class="fa-solid fa-campground"></i></div><p>Camping</p></div>
+      <div class="filter"><div><i class="fa-solid fa-cow"></i></div><p>Farm</p></div>
+      <div class="filter"><div><i class="fa-solid fa-igloo"></i></div><p>Arctic</p></div>
+      <div class="filter"><div><i class="fa-solid fa-umbrella-beach"></i></div><p>Beach</p></div>
+    <div class="filter">
+  <div><i class="fa-solid fa-monument"></i></div>
+  <p>Monuments</p>
 </div>
+ 
 
-        
-     </div>
-    </nav>
-     
-     
-     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-        <% for(let listing of allListings){%>
-     
-     <a href="/listings/<%=listing._id%> " class="listing-link">
-     <div class="card col listing-class " style="width: 25rem;" >
-  <img class="card-img-top" 
-    style="height: 20rem;"
-    src="<%=listing.image.url%>"
-     alt="Card-image-top"/>
-     <div class="card-img-overlay ">
-     
-      </div>
-
-
-  <div class="card-body">
-    <p class="card-text">
-         <b> <%=listing.title%></b><br>
-      &#8377; <%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "N/A" %> / night
-        <i class="tax-info"> &nbsp; &nbsp;+ 18%GST</i>
-
-    </p>
-   
+<div class="tax-toggle-box">
+  <div class="form-check-reverse form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+    <label class="form-check-label text-sm fw-semibold" for="flexSwitchCheckDefault">Display total after taxes</label>
+  </div>
+</div>
+    </div>
   </div>
 
-</div>
-<br>
-</a>
-
-
-
-
-
-
- 
-<%  }%>
-     </div>
-    
-
   
-     <script>
-         let taxSwitch=document.getElementById("flexSwitchCheckDefault");
-         taxSwitch.addEventListener("click",()=>{
-                   let taxinfo=document.getElementsByClassName("tax-info");
-                   for(info of taxinfo){
-                    if( info.style.display!=="inline") { info.style.display="inline";}
-                    else {
-                         info.style.display="none";
-                    }
-                   }
-         })
-     </script>
- 
+  <div class="grid-container">
+    <% for(let listing of allListings){ %>
+      <a href="/listings/<%=listing._id%>" class="listing-card-wrapper">
+        <div class="ambient-glow"></div>
+        <div class="dynamic-card">
+          <div class="card-img-wrapper">
+            <img src="<%=listing.image.url%>" alt="listing_image" />
+            <div class="badge-overlay">Explore</div>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title-text"><%=listing.title%></h3>
+            <div class="price-tag">
+              &#8377; <%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "N/A" %> <span class="text-xs font-normal">/ night</span>
+              <i class="tax-info">&nbsp; + 18% GST</i>
+            </div>
+          </div>
+        </div>
+      </a>
+    <% } %>
+  </div>
+
+  <script>
+    
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click", () => {
+      let taxinfo = document.getElementsByClassName("tax-info");
+      for (let info of taxinfo) {
+        info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+      }
+    });
+
+    // Pure JS 3D Parallax & Mouse Tracking Effect
+    const cards = document.querySelectorAll('.listing-card-wrapper');
+
+    cards.forEach(card => {
+      const innerCard = card.querySelector('.dynamic-card');
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -12; // Max tilt deg
+        const rotateY = ((x - centerX) / centerX) * 12;
+
+        innerCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        innerCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      });
+    });
+  </script>
+  <%- include("../partials/chatbot.ejs") %>
+</body>

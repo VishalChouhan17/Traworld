@@ -1,56 +1,173 @@
+<style>
+  /* Glassmorphism Navbar Base */
+  .custom-navbar {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    padding: 0.85rem 2rem;
+  }
 
-  <style>
-    .search-btn{
-       background-color:#fe424d;
-       color:white;
-       border-radius:25px;
-       padding :0 1rem 0 1rem;
-    }
-    .search-btn:hover{
-        background-color:#fe424d;
-        color:white;
-    }
-    .search-btn i{
-      display:inline;
-      margin-right:0.5rem;
+  /* Brand Compass Icon */
+  .brand-logo {
+    font-size: 2.2rem;
+    color: #fe424d;
+    transition: transform 0.4s ease;
+    display: flex;
+    align-items: center;
+  }
 
-    }
-    .search-inp{
-        border-radius: 25px !important; 
-        padding:0.5rem 3rem 0.5rem 1rem;
-    } 
-  </style>
+  .brand-logo:hover {
+    transform: rotate(45deg);
+    color: #e0313c;
+  }
 
+  /* Unified Pill Search Container */
+  .search-container {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 0.3rem 0.4rem 0.3rem 1.35rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  .search-container:focus-within {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+  }
+
+  .search-inp {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    font-size: 1rem; /* Increased font size */
+    font-weight: 500;
+    color: #334155;
+    background: transparent;
+  }
+
+  .search-btn {
+    background-color: #fe424d;
+    color: white;
+    border-radius: 999px;
+    padding: 0.6rem 1.35rem;
+    font-size: 0.95rem; /* Increased font size */
+    font-weight: 600;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .search-btn:hover {
+    background-color: #e0313c;
+    color: white;
+    transform: scale(1.02);
+  }
+
+  /* Standard Nav Links - Increased Size */
+  .nav-link-custom {
+    color: #334155 !important;
+    font-weight: 600;
+    font-size: 1.05rem; /* Increased font size */
+    padding: 0.5rem 1.1rem !important;
+    border-radius: 999px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-link-custom:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #0f172a !important;
+  }
+
+  /* Dynamic Neon Action Buttons */
+  .neon-btn {
+    position: relative;
+    font-size: 1rem; /* Increased font size */
+    font-weight: 700;
+    padding: 0.55rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none !important;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+  }
+
+  /* Signup Dynamic Neon Glow (Coral/Pink) */
+  .neon-btn-signup {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ff385c 0%, #e01e5a 100%);
+    box-shadow: 0 0 10px rgba(255, 56, 92, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .neon-btn-signup:hover {
+    box-shadow: 0 0 20px rgba(255, 56, 92, 0.8), 0 0 35px rgba(255, 56, 92, 0.5);
+    transform: translateY(-2px) scale(1.03);
+    color: #ffffff !important;
+  }
+
+  /* Login Dynamic Neon Border/Glow (Purple/Indigo Accent) */
+  .neon-btn-login {
+    color: #6366f1 !important;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1.5px solid rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+  }
+
+  .neon-btn-login:hover {
+    background: #6366f1;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.7), 0 0 35px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px) scale(1.03);
+    border-color: transparent;
+  }
+</style>
+
+<nav class="navbar navbar-expand-md custom-navbar sticky-top">
   <div class="container-fluid">
-    <a class=".fa-compass" href="/listings"> <i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Brand Logo -->
+    <a class="navbar-brand brand-logo" href="/listings">
+      <i class="fa-regular fa-compass"></i>
+    </a>
+
+    <!-- Mobile Toggler Button -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- Collapsible Content -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-       
-        <a class="nav-link" href="/listings">Explore</a>
+      <div class="navbar-nav me-auto">
+        <a class="nav-link nav-link-custom" href="/listings">Discover</a>
       </div>
-          <div class="navbar-nav ms-auto">
-            <form class="d-flex" role="serach">
-              <input class="form-control me-2 search-inp"  type="search" placeholder="Search Destinations" >
-              <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass" style="color: white;"></i>Search</button>
 
-            </form>
+      <!-- Center Search Bar -->
+      <div class="navbar-nav mx-auto my-2 my-md-0">
+        <form class="search-container" role="search" action="/listings" method="GET">
+          <input class="form-control search-inp" type="search" name="search" placeholder="Search destinations..." aria-label="Search">
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+        </form>
+      </div>
 
-          </div>
-        <div class="navbar-nav ms-auto">
-         <a class="nav-link" href="/listings/new">Airbnb your home</a>
-     <% if(!currUser) {%>  <a class="nav-link "  href="/signup"><b>Signup</b></a>
-        <a class="nav-link" href="/login"><b>Login</b></a>
-         <%}%>
-     <%if(currUser) {%>  <a class="nav-link" href="/logout"><b>Logout</b></a>
-   
-     <%}%>
-             </div>     
-     
+      <!-- Right Actions with Neon Buttons -->
+      <div class="navbar-nav ms-auto align-items-md-center gap-2">
+        <a class="nav-link nav-link-custom" href="/listings/new">Host a Stay</a>
+        
+        <% if(!currUser) { %>
+          <a class="neon-btn neon-btn-signup" href="/signup">Signup</a>
+          <a class="neon-btn neon-btn-login" href="/login">Login</a>
+        <% } %>
+        
+        <% if(currUser) { %>
+          <a class="neon-btn neon-btn-signup bg-danger" href="/logout">Logout</a>
+        <% } %>
+      </div>
     </div>
   </div>
 </nav>
