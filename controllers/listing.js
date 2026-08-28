@@ -1,12 +1,40 @@
 const Listing=require("../models/listing.js");
+module.exports.index = async (req, res) => {
+  try {
+    // Extract 'search' from req.query to match name="search" in your form
+    const { search, category } = req.query;
+    let query = {};
 
-module.exports.index=async(req,res)=>{
-    const allListings= await Listing.find({});//listings is collection of all the documents in the listing collection
-             res.render("listings/index.ejs",{allListings});
-       
+    // 1. Text Search Across Title, Location, Country, and Description
+    if (search && search.trim() !== "") {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [
+        { title: searchRegex },
+        { location: searchRegex },
+        { country: searchRegex },
+        { description: searchRegex }
+      ];
+    }
 
-}
+    // 2. Category Filter
+    if (category && category.trim() !== "") {
+      query.category = category.trim();
+    }
 
+    const allListings = await Listing.find(query);
+
+    // Pass 'search' back so the input field retains user text after submit
+    res.render("listings/index.ejs", { 
+      allListings, 
+      searchQuery: search || "", 
+      activeCategory: category || "" 
+    });
+  } catch (err) {
+    console.error("Error fetching listings:", err);
+    req.flash("error", "Cannot fetch listings at this time.");
+    res.redirect("/");
+  }
+};
 module.exports.rendernew=(req,res)=>{
       res.render("listings/new")}
 

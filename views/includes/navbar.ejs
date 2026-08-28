@@ -146,16 +146,22 @@
       </div>
 
       <!-- Center Search Bar -->
-      <div class="navbar-nav mx-auto my-2 my-md-0">
-        <form class="search-container" role="search" action="/listings" method="GET">
-          <input class="form-control search-inp" type="search" name="search" placeholder="Search destinations..." aria-label="Search">
-          <button class="btn search-btn" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i> Search
-          </button>
-        </form>
-      </div>
-
-      <!-- Right Actions with Neon Buttons -->
+      
+<div class="navbar-nav mx-auto my-2 my-md-0">
+  <form class="search-container" role="search" action="/listings" method="GET">
+    <input 
+      class="form-control search-inp" 
+      type="search" 
+      name="search" 
+      value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+      placeholder="Search destinations..." 
+      aria-label="Search"
+    >
+    <button class="btn search-btn" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+  </form>
+</div>
       <div class="navbar-nav ms-auto align-items-md-center gap-2">
         <a class="nav-link nav-link-custom" href="/listings/new">Host a Stay</a>
         

@@ -3,6 +3,22 @@ let Schema=mongoose.Schema;
 const Review=require("./review.js");
 
 let listingSchema =new Schema({
+  category: {
+  type: String,
+  enum: [
+    "Trending",
+    "Rooms",
+    "Iconic cities",
+    "Mountains",
+    "Castles",
+    "Amazing pools",
+    "Camping",
+    "Farm",
+    "Arctic",
+    "Beach",
+    "Monuments"
+  ]
+},
   title:{
     type:String,
     required:true,
@@ -42,16 +58,18 @@ let listingSchema =new Schema({
       type:Schema.Types.ObjectId,
       ref:"User",
   },
-  geometry: {
+ geometry: {
     type: {
-        type: String,
-        default: "Point"
+      type: String,
+      enum: ["Point"],
+      required: true,
+      default: "Point",
     },
     coordinates: {
-        type: [Number],
-        default: [77.4126, 23.2599]
-    }
-}
+      type: [Number],  //[Longitude, Latitude]
+      required: true,
+    },
+  },
 
 
 });
