@@ -63,11 +63,40 @@ module.exports.rendernew=(req,res)=>{
          const   newlisting  =new Listing( req.body.listing); 
            newlisting.owner=req.user._id;
             newlisting.image={url,filename};
-         await newlisting.save();
-            req.flash("success","New listing created !");
-             res.redirect("/listings");
+        // Fetch coordinates automatically based on location & country input
+  try {
+    const query = encodeURIComponent(`${newlisting.location}, ${newlisting.country}`);
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, {
+      headers: { "User-Agent": "WanderlustApp" }
+    });
+    const data = await response.json();
+
+    if (data && data.length > 0) {
+      newlisting.geometry = {
+        type: "Point",
+        coordinates: [parseFloat(data[0].lon), parseFloat(data[0].lat)] // [Longitude, Latitude]
+      };
+    } else {
+      // Fallback coordinates if location lookup yields no results
+      newlisting.geometry = {
+        type: "Point",
+        coordinates: [77.4126, 23.2599]
+      };
+    }
+  } catch (err) {
+    console.error("Geocoding failed:", err.message);
+    newlisting.geometry = {
+      type: "Point",
+      coordinates: [77.4126, 23.2599]
+    };
+  }
+
+  await newlisting.save();
+  req.flash("success", "New listing created !");
+  res.redirect(`/listings/${newlisting._id}`);
+};
       
-               }
+               
 
         module.exports.rendereditform=async(req,res)=>{
               let {id}=req.params;
